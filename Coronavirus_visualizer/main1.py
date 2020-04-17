@@ -60,8 +60,8 @@ def main():
     wm = World(style=wm_style, width=1200, height=600, )
     wm.title = 'Total Covid-19 cases, by country(4/15/20 : 4:15 pm)\n(Updated every 15 minutes)'
     wm.add('100,000+ ', corona_dict_4)
-    wm.add('1000-10,000 ', corona_dict_3)
-    wm.add('1000-100,1000 ', corona_dict_2)
+    wm.add('10,000-100,000 ', corona_dict_3)
+    wm.add('1000-10,000 ', corona_dict_2)
     wm.add('0-1000 ', corona_dict_1)
 
     wm.render_to_file('world_covid19_cases.svg')
