@@ -14,6 +14,20 @@ def main():
     with open('coronavirus_countries.json') as f:
         countries = json.load(f)
 
+    # Get initial data
+    querystring = {"country": 'Afghanistan'}
+
+    headers = {
+        'x-rapidapi-host': "covid-193.p.rapidapi.com",
+        'x-rapidapi-key': "cf0c1e4f88msh517766bd05c79e0p1b2912jsn8e0df2adc794"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    # Process API response
+    r = response.json()
+    time = r['response'][0]['time']
+
     @timer
     def get_data(countries, url):
         """ Get data for each country"""
@@ -32,12 +46,13 @@ def main():
             # Process API response
             r = response.json()
             data_cases = int(r['response'][0]['cases']['total'])
+            data_time = r['response'][0]['time']
             code = get_country_code(country)
             if code:
                 data_dict[code] = data_cases
             print(code)
 
-        return data_dict
+        return data_dict, data_time
 
     # Group the countries into 4 cases labels
     corona_dict = get_data(countries, url)
@@ -58,7 +73,7 @@ def main():
     # Create visualization
     wm_style = RotateStyle('#d62d20')
     wm = World(style=wm_style, width=1200, height=600, )
-    wm.title = 'Total Covid-19 cases, by country(4/15/20 : 4:15 pm)\n(Updated every 15 minutes)'
+    wm.title = f'Total Covid-19 cases, by country ({time})\n(Updated every 15 minutes)'
     wm.add('100,000+ ', corona_dict_4)
     wm.add('10,000-100,000 ', corona_dict_3)
     wm.add('1000-10,000 ', corona_dict_2)
